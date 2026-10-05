@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const API = 'http://localhost:3000/api/auth';
+const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/auth`;
 
 function Auth({ onAuth }) {
   const [mode, setMode] = useState('login'); // 'login' | 'signup'
