@@ -14,18 +14,35 @@ function HabitTracker({ user, token, onLogout }) {
     Authorization: `Bearer ${token}`,
   };
 
-  useEffect(() => {
-    fetch(API, { headers: authHeaders })
-      .then((res) => res.json())
-      .then((data) => {
-        setHabits(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError('Could not load habits');
-        setLoading(false);
-      });
-  }, []);
+useEffect(() => {
+  console.log('API URL being called:', API);
+
+  fetch(API, { headers: authHeaders })
+    .then(async (res) => {
+      const text = await res.text();
+      console.log('Raw response:', text);
+      console.log('Status:', res.status);
+      console.log('Content-Type:', res.headers.get('content-type'));
+
+      try {
+        return JSON.parse(text);
+      } catch {
+        throw new Error('Response was not JSON. See console for details.');
+      }
+    })
+    .then((data) => {
+      if (!Array.isArray(data)) {
+        throw new Error('Expected an array, got: ' + JSON.stringify(data));
+      }
+      setHabits(data);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error('Fetch failed:', err);
+      setError(err.message);
+      setLoading(false);
+    });
+}, []);
 
   async function addHabit(e) {
     e.preventDefault();
