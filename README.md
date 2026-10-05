@@ -52,3 +52,7 @@ Frontend runs on http://localhost:5173, backend on http://localhost:3000.
 ## Images
 
 ![Login Page](Images/Login.jpg)
+![Adding Multiple Habits](Images/AddingMultipleHabits.jpg)
+![Habits are Stored](Images/HabitsAreStored.jpg)
+![Marking Habit as Done](Images/MarkingHabitAsDone.jpg)
+![Unmarking Habit as Done](Images/UnmarkingHabitAsDone.jpg)
