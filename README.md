@@ -51,8 +51,17 @@ Frontend runs on http://localhost:5173, backend on http://localhost:3000.
 
 ## Images
 
-![Login Page](Images/Login.jpg)
-![Adding Multiple Habits](Images/AddingMultipleHabits.jpg)
-![Habits are Stored](Images/HabitsAreStored.jpg)
-![Marking Habit as Done](Images/MarkingHabitAsDone.jpg)
-![Unmarking Habit as Done](Images/UnmarkingHabitAsDone.jpg)
+
+<img src="Images/Login.jpg" width="300" alt="Login Page">
+
+
+<img src="Images/AddingMultipleHabits.jpg" width="300" alt="Adding Multiple Habits">
+
+
+<img src="Images/HabitsAreStored.jpg" width="300" alt="Habits are Stored">
+
+
+<img src="Images/MarkingHabitAsDone.jpg" width="300" alt="Marking Habit as Done">
+
+
+<img src="Images/UnmarkingHabitAsDone.jpg" width="300" alt="Unmarking Habit as Done">
