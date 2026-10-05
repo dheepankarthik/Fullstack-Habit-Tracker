@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 
-const API = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/habits`;
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API = `${API_BASE}/api/habits`;
+
+function makeHeaders(token) {
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+}
 
 function HabitTracker({ user, token, onLogout }) {
   const [habits, setHabits] = useState([]);
@@ -8,41 +16,22 @@ function HabitTracker({ user, token, onLogout }) {
   const [error, setError] = useState(null);
   const [newName, setNewName] = useState('');
 
-  // All requests to the API now include the JWT
-  const authHeaders = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  };
-
-useEffect(() => {
-  console.log('API URL being called:', API);
-
-  fetch(API, { headers: authHeaders })
-    .then(async (res) => {
-      const text = await res.text();
-      console.log('Raw response:', text);
-      console.log('Status:', res.status);
-      console.log('Content-Type:', res.headers.get('content-type'));
-
-      try {
-        return JSON.parse(text);
-      } catch {
-        throw new Error('Response was not JSON. See console for details.');
-      }
-    })
-    .then((data) => {
-      if (!Array.isArray(data)) {
-        throw new Error('Expected an array, got: ' + JSON.stringify(data));
-      }
-      setHabits(data);
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error('Fetch failed:', err);
-      setError(err.message);
-      setLoading(false);
-    });
-}, []);
+  useEffect(() => {
+    fetch(API, { headers: makeHeaders(token) })
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setHabits(data);
+        } else {
+          setError(data.error || 'Unexpected response from server');
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Could not load habits');
+        setLoading(false);
+      });
+  }, [token]);
 
   async function addHabit(e) {
     e.preventDefault();
@@ -51,7 +40,7 @@ useEffect(() => {
 
     const res = await fetch(API, {
       method: 'POST',
-      headers: authHeaders,
+      headers: makeHeaders(token),
       body: JSON.stringify({ name }),
     });
     if (!res.ok) {
@@ -66,7 +55,7 @@ useEffect(() => {
   async function toggleHabit(id) {
     const res = await fetch(`${API}/${id}`, {
       method: 'PUT',
-      headers: authHeaders,
+      headers: makeHeaders(token),
     });
     if (!res.ok) return;
     const updated = await res.json();
@@ -76,7 +65,7 @@ useEffect(() => {
   async function deleteHabit(id) {
     const res = await fetch(`${API}/${id}`, {
       method: 'DELETE',
-      headers: authHeaders,
+      headers: makeHeaders(token),
     });
     if (!res.ok) return;
     setHabits(habits.filter((h) => h.id !== id));
@@ -94,9 +83,7 @@ useEffect(() => {
             Logged in as <strong>{user.email}</strong>
           </p>
         </div>
-        <button className="logout-btn" onClick={onLogout}>
-          Log out
-        </button>
+        <button className="logout-btn" onClick={onLogout}>Log out</button>
       </header>
 
       <form className="add-form" onSubmit={addHabit}>
