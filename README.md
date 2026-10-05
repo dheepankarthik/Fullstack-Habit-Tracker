@@ -48,3 +48,7 @@ Frontend runs on http://localhost:5173, backend on http://localhost:3000.
 | POST | /api/habits | Yes | Create a habit |
 | PUT | /api/habits/:id | Yes | Toggle done status |
 | DELETE | /api/habits/:id | Yes | Delete a habit |
+
+## Images
+
+![Login Page](Images/Login.jpg)
